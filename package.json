@@ -3,7 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "graphql": "^14.1.1",
+    "graphql-client": "^2.0.1",
+    "prop-types": "^15.7.2",
+    "ra-data-graphql-simple": "^2.8.2",
+    "ra-data-json-server": "^2.8.0",
     "react": "^16.8.5",
+    "react-admin": "^2.8.2",
     "react-dom": "^16.8.5",
     "react-scripts": "2.1.8"
   },
