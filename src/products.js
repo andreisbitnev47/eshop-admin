@@ -46,11 +46,11 @@ export const ProductEdit = props => (
             <LongTextInput source="descriptionLongEn" />
             <LongTextInput source="descriptionLongEst" />
             <LongTextInput source="descriptionLongRus" />
-            <TextInput source="handle" />
+            <DisabledInput source="handle" />
             <NumberInput source="amount" />
-            <BooleanInput source="available" />
-            <ImageSelect source="imgSmall" />
-            <TextInput source="imgBig" />
+            <BooleanInput source="available"/>
+            <ImageSelect source="imgSmall"/>
+            <SelectArrayInput source="imgBig"/>
             <NumberInput source="price" />
         </SimpleForm>
     </Edit>

@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { any } from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -13,6 +13,7 @@ import compose from 'recompose/compose';
 import lifecycle from 'recompose/lifecycle';
 import withState from 'recompose/withState';
 import withHandlers from 'recompose/withHandlers';
+import { Field } from 'redux-form';
 
 const client = require('graphql-client')({
     url: 'http://localhost:5000/graphql',
@@ -55,37 +56,50 @@ const MenuProps = {
     },
 };
 
-const MultipleSelect = ({ classes, selectedImages, handleChange, images }) => {
-    return (
-        <div className={classes.root}>
-            <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="select-multiple">Name</InputLabel>
-                <Select
-                    multiple
-                    value={selectedImages}
-                    onChange={handleChange}
-                    input={<Input id="select-multiple" />}
-                    MenuProps={MenuProps}
-                >
-                    {images.map(({short, full}) => (
-                    <MenuItem key={short} value={short} style={{
-                        backgroundImage: `url('${full}')`,
-                        height: '40px',
-                        backgroundSize: 'contain',
-                        backgroundPosition: 'left top',
-                        backgroundRepeat: 'no-repeat',
-                        display: 'flex',
-                        'justify-content': 'flex-end',
-                    }}>
-                        {/* <div style={{height: '40px', width: '40px', backgroundImage: `url('${full}')`}}></div> */}
-                        {short}
-                    </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
-        </div>
-    );
-}
+const MultipleSelect = ({ classes, selectedImages, handleChange, images, source, hover, sethover }) => (
+
+    <div className={classes.root}>
+        <Field name={source} component={({ input }) => {
+            return (
+                <div>
+                    <FormControl className={classes.formControl}>
+                        <InputLabel htmlFor={source}>{source}</InputLabel>
+                        <Select
+                            multiple
+                            value={selectedImages}
+                            onChange={(event) => {
+                                handleChange(event);
+                                input.onChange(event.target.value);
+                            }}
+                            input={<Input />}
+                            MenuProps={MenuProps}
+                        >
+                            {images.map(({short, full}) => (
+                            <MenuItem key={short} value={short}
+                            style={{
+                                backgroundImage: `url('${full}')`,
+                                height: '40px',
+                                backgroundSize: 'contain',
+                                backgroundPosition: 'left top',
+                                backgroundRepeat: 'no-repeat',
+                                display: 'flex',
+                                justifyContent: 'flex-end',
+                            }}>
+                                {/* <div style={{height: '40px', width: '40px', backgroundImage: `url('${full}')`}}></div> */}
+                                {short}
+                            </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </div>
+            )
+        }}/>
+        {
+            hover ?
+            <img style={{ height: '250px', width: 'auto'}} src={hover}/> : null
+        }
+    </div>
+);
 
 MultipleSelect.propTypes = {
     classes: PropTypes.object.isRequired,
@@ -95,6 +109,7 @@ export default compose(
     withStyles(styles, { withTheme: true }),
     withState('images', 'setImages', []),
     withState('selectedImages', 'setSelectedImages', []),
+    withState('hover', 'sethover', ''),
     withHandlers({
         handleChange: ({ setSelectedImages }) => event => {
             setSelectedImages(event.target.value);
@@ -112,6 +127,8 @@ export default compose(
     }),
     lifecycle({
         componentDidMount() {
+            const { source, record } = this.props;
+            this.props.setSelectedImages(record[source]);
             const query = `
                 {
                     images
