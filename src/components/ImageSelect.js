@@ -17,8 +17,10 @@ import { Field } from 'redux-form';
 
 const client = require('graphql-client')({
     url: 'http://localhost:5000/graphql',
+    headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+    }
 });
-
 
 const styles = theme => ({
     root: {
@@ -56,7 +58,7 @@ const MenuProps = {
     },
 };
 
-const MultipleSelect = ({ classes, selectedImages, handleChange, images, source, hover, sethover }) => (
+const MultipleSelect = ({ classes, selectedImages, handleChange, images, source, hover }) => (
 
     <div className={classes.root}>
         <Field name={source} component={({ input }) => {
@@ -75,7 +77,7 @@ const MultipleSelect = ({ classes, selectedImages, handleChange, images, source,
                             MenuProps={MenuProps}
                         >
                             {images.map(({short, full}) => (
-                            <MenuItem key={short} value={short}
+                            <MenuItem key={short} value={short} 
                             style={{
                                 backgroundImage: `url('${full}')`,
                                 height: '40px',
@@ -128,7 +130,7 @@ export default compose(
     lifecycle({
         componentDidMount() {
             const { source, record } = this.props;
-            this.props.setSelectedImages(record[source]);
+            this.props.setSelectedImages(record[source] || []);
             const query = `
                 {
                     images

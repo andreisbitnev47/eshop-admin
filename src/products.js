@@ -7,6 +7,7 @@ import {
     NumberField,
     BooleanField,
     Edit,
+    Create,
     SimpleForm,
     ReferenceInput,
     TextInput,
@@ -50,8 +51,29 @@ export const ProductEdit = props => (
             <NumberInput source="amount" />
             <BooleanInput source="available"/>
             <ImageSelect source="imgSmall"/>
-            <SelectArrayInput source="imgBig"/>
+            <ImageSelect source="imgBig"/>
             <NumberInput source="price" />
         </SimpleForm>
     </Edit>
+);
+
+export const ProductCreate = props => (
+    <Create {...props}>
+        <SimpleForm>
+            <TextInput source="titleEn" />
+            <TextInput source="titleEst" />
+            <TextInput source="titleRus" />
+            <LongTextInput source="descriptionShortEn" />
+            <LongTextInput source="descriptionShortEst" />
+            <LongTextInput source="descriptionShortRus" />
+            <LongTextInput source="descriptionLongEn" />
+            <LongTextInput source="descriptionLongEst" />
+            <LongTextInput source="descriptionLongRus" />
+            <NumberInput source="amount" />
+            <BooleanInput source="available"/>
+            <ImageSelect source="imgSmall"/>
+            <ImageSelect source="imgBig"/>
+            <NumberInput source="price" />
+        </SimpleForm>
+    </Create>
 );

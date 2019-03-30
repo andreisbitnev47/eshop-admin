@@ -9,16 +9,17 @@ import {
     fetchUtils,
 } from 'react-admin';
 import { stringify } from 'query-string';
-import productsQueries from './queries/products';
+import productQueries from './queries/product';
 
 const resourseMap = {
-    products: productsQueries,
+    product: productQueries,
 }
 
-const API_URL = 'my.api.url';
-const url = 'http://localhost:5000/graphql';
 const client = require('graphql-client')({
     url: 'http://localhost:5000/graphql',
+    headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+    }
 });
 
 /**
@@ -27,6 +28,10 @@ const client = require('graphql-client')({
  * @param {Object} params The Data Provider request params, depending on the type
  * @returns {Object} { url, options } The HTTP request parameters
  */
+
+function capitalize(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 export default (type, resource, params) => {
     return new Promise((resolve, reject) => {
@@ -37,7 +42,17 @@ export default (type, resource, params) => {
             }
         })
         .then((response) => {
-            resolve({ data: response.data.products, total: response.data.products.length });
+            const data = 
+                type === 'GET_LIST' ? response.data[resource + 's'] :
+                type === 'UPDATE' ? response.data['edit' + capitalize(resource)][resource] :
+                type === 'CREATE' ? response.data['add' + capitalize(resource)][resource] :
+                type === 'DELETE' ? response.data['delete' + capitalize(resource)][resource] :
+                response.data[resource]
+            const result = { data };
+            if (type === 'GET_LIST') {
+                result.total = data.length;
+            }
+            resolve(result);
         });
     })
     // return fetchJson(url, options)
