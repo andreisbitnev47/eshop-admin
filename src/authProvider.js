@@ -1,8 +1,9 @@
 import { AUTH_LOGIN, AUTH_LOGOUT, AUTH_ERROR, AUTH_CHECK } from 'react-admin';
 import get from 'lodash/get';
+import { BACKEND_GRAPHQL } from './env';
 
 const client = require('graphql-client')({
-    url: 'http://localhost:5000/graphql',
+    url: BACKEND_GRAPHQL,
 });
 
 const loginMutation = `

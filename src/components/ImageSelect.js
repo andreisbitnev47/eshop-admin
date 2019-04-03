@@ -14,9 +14,10 @@ import lifecycle from 'recompose/lifecycle';
 import withState from 'recompose/withState';
 import withHandlers from 'recompose/withHandlers';
 import { Field } from 'redux-form';
+import { BACKEND_URL, BACKEND_GRAPHQL } from './env';
 
 const client = require('graphql-client')({
-    url: 'http://localhost:5000/graphql',
+    url: BACKEND_GRAPHQL,
     headers: {
         Authorization: 'Bearer ' + localStorage.getItem('token'),
     }
@@ -141,7 +142,7 @@ export default compose(
             .then((result) => {
                 const images = result.data.images.map(url => ({
                     short: url,
-                    full: `http://localhost:5000${url}`
+                    full: `${BACKEND_URL}${url}`
                 }));
                 setImages(images);
             });
