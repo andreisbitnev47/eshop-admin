@@ -14,7 +14,7 @@ import lifecycle from 'recompose/lifecycle';
 import withState from 'recompose/withState';
 import withHandlers from 'recompose/withHandlers';
 import { Field } from 'redux-form';
-import { BACKEND_URL, BACKEND_GRAPHQL } from './env';
+import { BACKEND_URL, BACKEND_GRAPHQL } from '../env';
 
 const client = require('graphql-client')({
     url: BACKEND_GRAPHQL,
