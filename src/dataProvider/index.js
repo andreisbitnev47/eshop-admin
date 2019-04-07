@@ -12,18 +12,20 @@ import { stringify } from 'query-string';
 import productQueries from './queries/product';
 import orderQueries from './queries/order';
 import imageQueries from './queries/image';
+import contentQueries from './queries/content';
 import { BACKEND_URL, BACKEND_GRAPHQL } from '../env';
 
 const resourseMap = {
     product: productQueries,
     order: orderQueries,
     image: imageQueries,
+    content: contentQueries,
 }
 
 const client = require('graphql-client')({
     url: BACKEND_GRAPHQL,
     headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('token'),
+        Authorization: localStorage.getItem('token'),
     }
 });
 
@@ -46,7 +48,7 @@ const upload = (file) => {
             method: 'POST',
             body: formData,
             headers: {
-                "Authorization": 'Bearer ' + localStorage.getItem('token'),
+                "Authorization": localStorage.getItem('token'),
             },
         };
         
